@@ -1,12 +1,14 @@
 # app.py
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-# We'll use a library for the post-quantum crypto. For this example, let's use a placeholder.
-# In the real build, we'll integrate a library like pqcrypto-tool.
 import os
 
+# Create an instance of the Flask application
 app = Flask(__name__)
-CORS(app) # Enables Cross-Origin Resource Sharing for the frontend
+
+# Configure CORS to allow requests from your specific Vercel frontend URL
+# Replace 'https://quantumlock-frontend.vercel.app' with your actual Vercel URL
+CORS(app, origins='https://quantumlock-frontend.vercel.app')
 
 # Placeholder for a Quantum-Random Number Generator. In the final version, this would be an API call.
 def get_quantum_random_bytes(length):
