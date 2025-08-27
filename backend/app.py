@@ -1,37 +1,34 @@
-# app.py
-from flask import Flask, jsonify
-
-app = Flask(__name__)
-
-@app.route("/")
-def home():
-    return jsonify({"message": "QuantumLock Backend API is running 🚀"})
-
-# your other routes here...
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 import os
 
 # Create an instance of the Flask application
 app = Flask(__name__)
 
-# Configure CORS to allow requests from your specific Vercel frontend URL
-# Replace 'https://quantumlock-frontend.vercel.app' with your actual Vercel URL
-CORS(app)
+# This is the final, definitive CORS fix. It explicitly adds the headers
+# to every response before it is sent back to the browser.
+@app.before_request
+def handle_before_request():
+    response = make_response()
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', '*')
+    response.headers.add('Access-Control-Allow-Methods', '*')
+    return response
 
-# Placeholder for a Quantum-Random Number Generator. In the final version, this would be an API call.
+# This is the root route for health checks.
+@app.route("/")
+def home():
+    return jsonify({"message": "QuantumLock Backend API is running 🚀"})
+
+# Placeholder for a Quantum-Random Number Generator
 def get_quantum_random_bytes(length):
-    # This is a placeholder for a real API call to a QRNG service.
-    # We'll mock it for now to get the project working.
     return os.urandom(length)
 
-# A placeholder for the post-quantum encryption/decryption logic.
-# In the final version, this would use a library like 'pqcrypto'.
+# A placeholder for the post-quantum encryption/decryption logic
 class PostQuantumCipher:
     def __init__(self, key):
         self.key = key
     def encrypt(self, message):
-        # Placeholder logic: simple XOR for demonstration
         encrypted_bytes = bytearray(message.encode('utf-8'))
         for i in range(len(encrypted_bytes)):
             encrypted_bytes[i] ^= self.key[i % len(self.key)]
@@ -44,7 +41,7 @@ class PostQuantumCipher:
 
 @app.route('/api/generate-key', methods=['GET'])
 def generate_key():
-    key_length = 32 # Example key length
+    key_length = 32
     key = get_quantum_random_bytes(key_length)
     return jsonify({
         'key': key.hex(),
