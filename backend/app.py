@@ -1,4 +1,13 @@
 # app.py
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return jsonify({"message": "QuantumLock Backend API is running 🚀"})
+
+# your other routes here...
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
