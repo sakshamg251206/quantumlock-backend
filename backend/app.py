@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 # Configure CORS to allow requests from your specific Vercel frontend URL
 # Replace 'https://quantumlock-frontend.vercel.app' with your actual Vercel URL
-CORS(app, origins='https://quantumlock-frontend.vercel.app')
+CORS(app)
 
 # Placeholder for a Quantum-Random Number Generator. In the final version, this would be an API call.
 def get_quantum_random_bytes(length):
